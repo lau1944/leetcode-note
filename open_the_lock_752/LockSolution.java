@@ -9,7 +9,8 @@ public class LockSolution {
         final String target = "0202";
 
         LockSolution lockSolution = new LockSolution();
-        int result = lockSolution.openLock(deads, target);
+        int result = lockSolution.openDoubleBfsLock(deads, target);
+        //int result = lockSolution.openBfsLock(deads, target);
         System.out.println(result);
     }
 
@@ -20,7 +21,7 @@ public class LockSolution {
      * @param target
      * @return 转动次数
      */
-    public int openLock(String[] deadends, String target) {
+    public int openBfsLock(String[] deadends, String target) {
         if (target == "0000")
             return 0;
         Set<String> deadSet = new HashSet<>();
@@ -40,10 +41,14 @@ public class LockSolution {
         visited.add("0000");
 
         while (!buffer.isEmpty()) {
-            ++step;
             int size = buffer.size();
             for (int i = 0; i < size; ++i) {
                 String current = buffer.poll();
+
+                if (target.equals(current)) {
+                    return step;
+                }
+
                 // up and down
                 char[] curArr = current.toCharArray();
                 for (int j = 0; j < curArr.length; ++j) {
@@ -51,9 +56,6 @@ public class LockSolution {
                     curArr[j] = up(cur);
                     // count up
                     String upString = new String(curArr);
-                    if (target.equals(upString)) {
-                        return step;
-                    }
                     if (!visited.contains(upString) && !deadSet.contains(upString)) {
                         buffer.add(upString);
                         visited.add(upString);
@@ -61,9 +63,6 @@ public class LockSolution {
                     // count down
                     curArr[j] = down(cur);
                     String downString = new String(curArr);
-                    if (target.equals(downString)) {
-                        return step;
-                    }
                     if (!visited.contains(downString) && !deadSet.contains(downString)) {
                         buffer.add(downString);
                         visited.add(downString);
@@ -71,6 +70,68 @@ public class LockSolution {
                     curArr[j] = cur;
                 }
             }
+            ++step;
+        }
+
+        return -1;
+    }
+
+    /**
+     * 双向bfs遍历
+     * 
+     * @param deaStrings
+     * @param target
+     * @return
+     */
+    public int openDoubleBfsLock(String[] deadends, String target) {
+        if (target == "0000")
+            return 0;
+        Set<String> visited = new HashSet<>();
+        for (String dead : deadends) {
+            visited.add(dead);
+        }
+
+        if (visited.contains("0000")) {
+            return -1;
+        }
+
+        int step = 0;
+        Set<String> q1 = new HashSet<>();
+        q1.add("0000");
+        Set<String> q2 = new HashSet<>();
+        q2.add(target);
+
+        while (!q1.isEmpty() && !q2.isEmpty()) {
+            Set<String> temp = new HashSet<>();
+            for (String cur : q1) {
+                if (visited.contains(cur)) {
+                    continue;
+                }
+                if (q2.contains(cur)) {
+                    return step;
+                }
+
+                visited.add(cur);
+
+                char[] charArr = cur.toCharArray();
+                for (int i = 0; i < cur.length(); ++i) {
+                    char curCh = charArr[i];
+                    charArr[i] = up(curCh);
+                    String curStr = new String(charArr);
+                    if (!visited.contains(curStr)) {
+                        temp.add(curStr);
+                    }
+                    charArr[i] = down(curCh);
+                    curStr = new String(charArr);
+                    if (!visited.contains(curStr)) {
+                        temp.add(curStr);
+                    }
+                    charArr[i] = curCh;
+                }
+            }
+            ++step;
+            q1 = q2;
+            q2 = temp;
         }
 
         return -1;
