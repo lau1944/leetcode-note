@@ -38,7 +38,7 @@
 移动 3 次: [[1,0,2],[4,5,3]]
 移动 4 次: [[1,2,0],[4,5,3]]
 移动 5 次: [[1,2,3],[4,5,0]]
- ```
+```
 ```
 提示：
 
@@ -48,4 +48,4 @@ board[i].length == 3
 board[i][j] 中每个值都 不同
 ```
 
-<a href="https://leetcode.cn/problems/sliding-puzzle/">力扣链接</a>
+<a href="https://leetcode.cn/problems/sliding-puzzle">力扣链接</a>
