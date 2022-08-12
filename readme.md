@@ -15,7 +15,7 @@
 套路:
 需要使用子树信息时使用后序遍历, 并且规划好返回值
 
-[669 - trim a binary tree](./trim_a_binary_tree_669)
+[669 - trim a binary tree](./trim_a_binary_search_tree_669)
 <br />
 [124 - binary tree max path sum](./bt_max_path_sum_124)
 <br />
